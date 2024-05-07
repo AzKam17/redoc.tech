@@ -1,3 +1,9 @@
+<<<<<<< HEAD
 /.env.dev
 /.idea
 /.docker
+=======
+/.env
+/.idea
+/.docker
+>>>>>>> cb3309b6bb08ba66d8dc3200765fc36d26b3e8d5

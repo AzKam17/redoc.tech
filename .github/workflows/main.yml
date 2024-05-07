@@ -1,0 +1,31 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_and_push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: 22
+          script: |
+            cd /var/www/cv.redoc.tech
+            git pull
+            docker compose down
+            docker compose -f docker-compose.prod.yml up -d
+            sleep 15
+            docker compose exec php-fpm composer i --no-interaction --prefer-dist
+            docker compose exec php-fpm php bin/console d:m:m --no-interaction
+            docker compose exec php-fpm composer dump-env dev
+            docker compose exec php-fpm php bin/console c:c
+            docker compose exec php-fpm composer dump-env prod
+            docker compose exec php-fpm php bin/console c:c
+            docker compose exec php-fpm chmod -R 777 var/
