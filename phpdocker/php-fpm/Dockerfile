@@ -7,6 +7,7 @@ RUN apt-get update \
         php8.1-mysql \ 
         php8.1-pgsql \ 
         php8.1-redis \
+	php8.1-sqlite3 \
     && curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | bash \
     && apt install symfony-cli \
     && apt-get clean \
